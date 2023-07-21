@@ -1,0 +1,27 @@
+body {
+  background-color:gray; font-family:sans-serif;
+}
+.header {
+  color:white; text-align:center; background-color:lightgray;
+}
+.header h1 {
+  padding:10px;
+}
+.nav {
+  float:left; margin:10px; list-style-type:none; padding:0;
+}
+ul {
+  list-style-type:none; margin:0; padding:0;
+}
+a {
+  color:white; text-decoration:none; font-weight:bold; margin:0; padding:0;
+}
+.main {
+  float:right; width:80%; margin:10px;
+}
+.footer {
+  clear:both; background-color:#525252; color:gray; text-align:right; margin:0;
+}
+.footer p {
+  padding:15px;
+}
