@@ -1,0 +1,7 @@
+- If there's a problem loading a webpage that should be hosted on DigitalOcean (DO), check the firewall
+    - Currently enabled: DO Firewall https://cloud.digitalocean.com/networking/firewalls/
+    - There's also the ufw firewall, enabled from the command line:
+
+$ ufw status        # shows what's currently allowed through the firewall
+$ ufw app list      # shows apps available to allow through firewall
+$ ufw allow OpenSSH # allows a particular app
