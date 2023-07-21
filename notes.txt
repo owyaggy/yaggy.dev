@@ -1,3 +1,7 @@
+## COMMON COMMAND LINE COMMANDS ##
+$ mv old_dir new_dir    # moves a directory/file, essentially renaming it
+$ mv old_file new_file
+
 ## FIREWALLS ##
 - If there's a problem loading a webpage that should be hosted on DigitalOcean (DO), check the firewall
     - Currently enabled: DO Firewall https://cloud.digitalocean.com/networking/firewalls/
@@ -26,3 +30,57 @@ $ sudo systemctl disable nginx
 
 Enable nginx starting automatically when server boots (default):
 $ sudo systemctl enable nginx
+
+Test to make sure there are no syntax errors in any Nginx files:
+$ sudo nginx -t
+
+Setting up a server block for a new domain:
+$ sudo mkdir -p /var/www/your_domain/html               # making directory for it (-p creates parent dirs)
+$ sudo chown -R $USER:$USER /var/www/your_domain/html   # assign ownership of directory
+$ sudo chmod -R 755 /var/www/your_domain                # test ownership is correct
+$ nano /var/www/your_domain/html/index.html             # makes a landing page - customize as desired
+$ sudo nano /etc/nginx/sites-available/your_domain      # makes a configuration block - see below:
+
+'/etc/nginx/sites-available/your_domain':
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/your_domain/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name your_domain www.your_domain;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+
+- Then enable file by linking it (see below)
+
+Enable a file in 'sites-available' by creating a link from it to the 'sites-enabled' directory:
+$ sudo ln -s /etc/nginx/sites-available/your_domain /etc/nginx/sites-enabled/
+
+* Important Nginx Files and Directories *
+Content
+- '/var/www/html': Actual web content, by default only the default Nginx page. Can be changed by altering
+  Nginx config files
+
+Server Configuration
+- '/etc/nginx/': The Nginx configuration directory. All of the Nginx configuration files reside here.
+- '/etc/nginx/nginx.conf': The main Nginx configuration file. Can be modified to make changes to the Nginx
+  global configuration.
+- '/etc/nginx/sites-available/': The directory where per-site server blocks will be stored. Nginx will not
+  use the configuration files found in this directory unless they are linked to the 'sites-enabled'
+  directory. Typically, all server block configuration is done in this directory, and then enabled by
+  linking to the other directory.
+- '/etc/nginx/sites-enabled/': The directory where enabled per-site server blocks are stored. Typically,
+  these are created by linking to configuration files found in the 'sites-available' directory.
+- '/etc/nginx/snippets': This directory contains configuration fragments that can be included elsewhere in
+  the Nginx configuration. Potentially repeatable configuration segments are good candidates for
+  refactoring into snippets.
+
+Server Logs
+- '/var/log/nginx/access.log': Every request to your server is recorded in this log file unless Nginx is
+  configured to do otherwise.
+- '/var/log/nginx/error.log': Any Nginx errors will be recorded in this log.
