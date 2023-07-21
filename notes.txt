@@ -1,3 +1,4 @@
+## FIREWALLS ##
 - If there's a problem loading a webpage that should be hosted on DigitalOcean (DO), check the firewall
     - Currently enabled: DO Firewall https://cloud.digitalocean.com/networking/firewalls/
     - There's also the ufw firewall, enabled from the command line:
@@ -5,3 +6,23 @@
 $ ufw status        # shows what's currently allowed through the firewall
 $ ufw app list      # shows apps available to allow through firewall
 $ ufw allow OpenSSH # allows a particular app
+
+
+## NGINX ##
+Start the web server when it is stopped:
+$ sudo systemctl start nginx
+
+Stop the web server:
+$ sudo systemctl stop nginx
+
+Stop and start web server again:
+$ sudo systemctl restart nginx
+
+If making configuration changes take effect without restarting web server (not always possible):
+$ sudo systemctl reload nginx
+
+Disable nginx starting automatically when server boots:
+$ sudo systemctl disable nginx
+
+Enable nginx starting automatically when server boots (default):
+$ sudo systemctl enable nginx
