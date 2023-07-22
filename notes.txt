@@ -1,11 +1,5 @@
 ## COMMON COMMAND LINE COMMANDS ##
-$ mv old_dir new_dir    # moves a directory/file, essentially renaming it
-$ mv old_file new_file
 
-$ cd new_dir            # change directory to new_dir ('cd ..' returns to parent directory, 'cd' goes home)
-$ pwd                   # present working directory: see the path to the directory you're in
-$ mkdir your_dir        # make a directory called your_dir
-$ ls                    # list the files in the working directory
 $ ls -l                 # adding the flag -l is an option for a long listing format
 $ ls -h                 # the -h flag signifies --human-readable (express memory in appropriate unit)
                         # single-hyphen flags are usually one letter options:   -h
@@ -21,10 +15,60 @@ $ cd ~                  # return to home directory
 $ cd                    # return to home directory
 $ pwd                   # display present working directory (absolute path to)
 $ ls                    # list files in pwd
+$ ls /home              # list files in specified path
+
+* Creating, modifying and viewing files *
+$ mkdir files                           # creates a directory called files
+$ mkdir -p other/files                  # creates parent directories (use when also creating 'other')
+$ touch ocean.txt                       # creates/modifies file (can do multiple at once)
+$ echo Hello, World!                    # terminal will repeat back 'Hello, World!'
+$ echo "Sammy the Shark" > sammy.txt    # adds text to a new file ('>': redirection operator)
+$ cat sammy.txt                         # "concatenate": show file contents and return to prompt
+$ echo "Mariana Trench???" > ocean.txt  # echo can work on existing files
+$ nano sammy.txt                        # opens simple text editor working on sammy.txt (^O to save)
+$ mv sammy.txt students                 # moves file to directory
+$ mv sammy.txt students/sammy.txt       # same function, but also allows for file renaming
+        # DANGER: no safeties on accidentally overwriting files! they'll be deleted!
+$ mv students/sammy.txt .               # moves file to current directory (pwd)
+$ mv students pupils                    # rename the directory, but maintaining contents
+$ cp sammy.txt alex.txt                 # copy file
+$ cp -r students pupils                 # copy a directory using -r option to copy contents also
+$ less sammy.txt                        # fills terminal window with file
+    # navigation: up/down arrows, page up/down buttons, ctrl-b/f
+    # search: /text_to_find (matching case), n for next result, N for previous
+    # type 'q' to exit the 'less' program
+$ head sammy.txt                        # shows first 10 lines by default
+$ tail sammy.txt                        # shows last 10 lines by default
+
+
+* Autocompletion and history *
+$ history       # summons entire history of command line session
+
+* Working with files from the web
+$ curl example.com/articles/news.txt            # transfers data from web to terminal (text outputted)
+$ curl -O example.com/articles/news.txt         # flag -O downloads file, taking name of remote file
+$ curl -o example.com/articles/news.txt old.txt # flag -o is same, but can rename file as argument
+
+* Removing files and terminating commands *
+$ rm sammy.txt      # irreversibly delete a file
+$ rmdir students    # delete an EMPTY directory
+$ rm -r students    # recursively delete directory (deletes contained files)
+$ exit              # ends session
+$ logout            # ends session
+
+* Using options *
+Options follow a command and are indicated by a single '-' character followed by one or more options,
+which are represented by individual upper- or lower-case letters. Some multi-word options can start
+with --, followed by the flag text. Options are also called flags or switches.
+Options can be combined in several ways: '$ls -l -a', '$ls -al', '$ls -la /home'
+
+Examples for $ls:
+-l: print a "long listing" with extra details (e.g. permissions)
+-a: list all a directory's files, including hidden ones (starting with '.')
+-h: (--human-readable) express memory in understandable units when looking at long listings
 
 * Understanding detailed file info *
--  'ls -l' displays the user permissions on a file, for example:
-drwxrwxr-x 2 owen owen 4.0K Jul 22 04:00 files
+Example: drwxrwxr-x 2 owen owen 4.0K Jul 22 04:00 files
 d: directory (beginning with '-' signifies non-directory file)
 r: read (permission to open and read a file/list directory contents)
 w: write (permission to modify file content, add/remove/rename directory files)
@@ -39,6 +83,16 @@ In order:   d -> directory
             owen -> group with access to directory
             4.0K -> memory allocation for the directory
             date -> date last modified
+
+* Environment variables *
+$ env           # view all current environment variables
+$ echo $PATH    # prints value of PATH variable
+$ VAR=value     # set value of a variable (creates VAR or overwrites existing value)
+$ export PATH=$PATH:/opt/app/bin
+                # add /opt/app/bin to the PATH environment variable (only current session)
+
+The PATH environment variable is a colon-delimited list of directories where the shell will look for
+executable programs or scripts when a command is issued.
 
 ## FIREWALLS ##
 - If there's a problem loading a webpage that should be hosted on DigitalOcean (DO), check the firewall
