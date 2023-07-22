@@ -271,3 +271,10 @@ $ sudo certbot --nginx -d example.com -d www.example.com    # installs ssl certi
 
 $ sudo systemctl status snap.certbot.renew.service      # check that the timer is working
 $ sudo certbot renew --dry-run                          # test renewal process
+
+## LINKS ##
+Installing Nginx on Ubuntu:
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-22-04
+
+Serving Flask Applications with Gunicorn and Nginx on Ubuntu:
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-22-04
