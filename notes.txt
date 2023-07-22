@@ -2,6 +2,44 @@
 $ mv old_dir new_dir    # moves a directory/file, essentially renaming it
 $ mv old_file new_file
 
+$ cd new_dir            # change directory to new_dir ('cd ..' returns to parent directory, 'cd' goes home)
+$ pwd                   # present working directory: see the path to the directory you're in
+$ mkdir your_dir        # make a directory called your_dir
+$ ls                    # list the files in the working directory
+$ ls -l                 # adding the flag -l is an option for a long listing format
+$ ls -h                 # the -h flag signifies --human-readable (express memory in appropriate unit)
+                        # single-hyphen flags are usually one letter options:   -h
+                        # double-hyphen flags are usually multi-word options:   --human-readable
+
+* Navigating the filesystem *
+$ cd files              # navigate directory to specific directory called 'files'
+$ cd /                  # navigate to primary directory
+$ cd /home/owen/files   # navigate using absolute path (relative path: starting from pwd)
+$ cd ..                 # return to parent directory
+$ cd ../..              # return to parent of parent directory
+$ cd ~                  # return to home directory
+$ cd                    # return to home directory
+$ pwd                   # display present working directory (absolute path to)
+$ ls                    # list files in pwd
+
+* Understanding detailed file info *
+-  'ls -l' displays the user permissions on a file, for example:
+drwxrwxr-x 2 owen owen 4.0K Jul 22 04:00 files
+d: directory (beginning with '-' signifies non-directory file)
+r: read (permission to open and read a file/list directory contents)
+w: write (permission to modify file content, add/remove/rename directory files)
+x: execute (permission to run program files, enter/access directory files)
+
+In order:   d -> directory
+            rwx  -> permissions for directory owner (hyphen indicates absence of that permission)
+            rwx  -> group permissions for directory
+            rwx  -> permissions for other groups that have access to the machine
+            2    -> the number of links in the file (here: 1-link to file, 2-self-referential link)
+            owen -> owner of directory and its creator
+            owen -> group with access to directory
+            4.0K -> memory allocation for the directory
+            date -> date last modified
+
 ## FIREWALLS ##
 - If there's a problem loading a webpage that should be hosted on DigitalOcean (DO), check the firewall
     - Currently enabled: DO Firewall https://cloud.digitalocean.com/networking/firewalls/
@@ -13,6 +51,9 @@ $ ufw allow OpenSSH # allows a particular app
 
 
 ## NGINX ##
+Check status of nginx web server:
+$ sudo systemctl status nginx
+
 Start the web server when it is stopped:
 $ sudo systemctl start nginx
 
@@ -84,3 +125,31 @@ Server Logs
 - '/var/log/nginx/access.log': Every request to your server is recorded in this log file unless Nginx is
   configured to do otherwise.
 - '/var/log/nginx/error.log': Any Nginx errors will be recorded in this log.
+
+## CERTBOT / Automatic SSL
+Certbot is a software client provided by Let's Encrypt that helps automate and simplify the process of
+obtaining and renewing free SSL certificates.
+
+1. Install Certbot
+$ sudo snap install core; sudo snap refresh core    # make sure snap is up-to-date
+$ sudo apt remove certbot                           # remove older version of certbot, if exists
+$ sudo snap install --classic certbot               # install certbot package
+$ sudo ln -s /snap/bin/certbot /usr/bin/certbot     # allow running certbot by typing only 'certbot'
+
+2. Confirm Nginx Configuration
+- 'server_name' in '/etc/nginx/sites-available/example.com' should be set up:
+    ...server_name example.com www.example.com...
+- reload nginx if necessary
+
+3. Allow HTTPS through firewall
+
+4. Obtain SSL Certificate
+$ sudo certbot --nginx -d example.com -d www.example.com    # installs ssl certificate!
+- Automatically redirects http:// to https://
+
+5. Certbot Auto-Renewal
+- Certbot handles this automatically. Let's Encrypt SSL certificates only last for 90 days, and certbot
+  auto-renews it when it is 30 days from expiration by running a check twice a day.
+
+$ sudo systemctl status snap.certbot.renew.service      # check that the timer is working
+$ sudo certbot renew --dry-run                          # test renewal process
